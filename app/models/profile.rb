@@ -22,4 +22,10 @@ class Profile < ActiveRecord::Base
       errors.add(:first_name, "males can't have first name sue")
     end
   end
+
+
+  def self.get_all_profiles(min_year, max_year)
+    # Profile.where(:birth_year => min_year..max_year).order(:birth_year).to_a
+    Profile.where("birth_year BETWEEN :min_year AND :max_year", min_year: min_year, max_year: max_year).order(:birth_year).to_a
+  end
 end
