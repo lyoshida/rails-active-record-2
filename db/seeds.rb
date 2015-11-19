@@ -1,46 +1,27 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+today = Date.today
+two_days_ago = Date.today - 2.days
+three_days_ago = Date.today - 3.days
+dates = [today, two_days_ago, three_days_ago]
 
-fiorina = User.create(username: 'Fiorina', password_digest: '123')
-trump = User.create(username: 'Trump', password_digest: '123')
-carson = User.create(username: 'Carson', password_digest: '123')
-clinton = User.create(username: 'Clinton', password_digest: '123')
+User.destroy_all
+TodoList.destroy_all
 
-fiorina.profile = Profile.create(gender: 'female', first_name: 'Carly', last_name: 'Fiorina', birth_year: 1954)
-trump.profile = Profile.create(gender: 'male', first_name: 'Donald', last_name: 'Trump', birth_year: 1946)
-carson.profile = Profile.create(gender: 'male', first_name: 'Ben', last_name: 'Carson', birth_year: 1951)
-clinton.profile = Profile.create(gender: 'female', first_name: 'Hillary', last_name: 'Clinton', birth_year: 1947)
+100.times { |index| TodoList.create! list_name: "List #{index}", list_due_date: dates.sample }
 
-fiorina_todo = TodoList.create(list_name: 'todo list', list_due_date: Date.today + 1.year, user: fiorina)
-trump_todo = TodoList.create(list_name: 'todo list', list_due_date: Date.today + 1.year, user: trump)
-carson_todo = TodoList.create(list_name: 'todo list', list_due_date: Date.today + 1.year, user: carson)
-clinton_todo = TodoList.create(list_name: 'todo list', list_due_date: Date.today + 1.year, user: clinton)
+TodoList.all.each do |list|
+  list.todo_items.create! [
+    { title: "Task 1", due_date: dates.sample, description: "very important task TEST", completed: false },
+    { title: "Task 2", due_date: dates.sample, description: "do something else TEST", completed: true},
+    { title: "Task 3", due_date: dates.sample, description: "learn Action Pack TEST", completed: true}
+  ]
+end
 
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: fiorina_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: fiorina_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: fiorina_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: fiorina_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: fiorina_todo)
+users = User.create! [
+  { username: "jim", password: "abc123" },
+  { username: "rich", password: "123abc" }
+]
 
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: trump_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: trump_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: trump_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: trump_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: trump_todo)
-
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: carson_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: carson_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: carson_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: carson_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: carson_todo)
-
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: clinton_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: clinton_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: clinton_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: clinton_todo)
-TodoItem.create(due_date: Date.today + 1.year, title: 'item', description: 'description', todo_list: clinton_todo)
+TodoList.all.each do |list|
+  list.user = users.sample
+  list.save!
+end
