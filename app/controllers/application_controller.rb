@@ -6,15 +6,15 @@ class ApplicationController < ActionController::Base
   before_action :ensure_login
 
   def logged_in?
-    session[:user_id]
+    session[:id]
   end
 
   def current_user
-    @current_user ||= User.find(session['user_id'])
+    @current_user ||= User.find(session['id'])
   end
 
   def ensure_login
-    redirect_to login_path unless session[:user_id]
+    redirect_to login_path unless session[:id]
   end
 
   helper_method :current_user, :logged_in?
